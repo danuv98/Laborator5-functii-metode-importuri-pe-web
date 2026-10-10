@@ -1,5 +1,5 @@
 # Laborator: funcții, metode și importuri pe web
-# Student: <numele vostru>
+# Student: Danuta Daniel
 
 BASE_URL = "https://cybercor.org"
 ECHO_URL = "https://httpbin.org"
