@@ -118,6 +118,88 @@ def get_header(url, name, default = "lipsește"):
 
 # --Ex30--
 
+SECURITY_HEADERS = [
+    "Strict-Transport-Security",
+    "Content-Security-Policy",
+    "X-Frame-Options",
+    "X-Content-Type-Options",
+    "Referrer-Policy",
+]
+
+
+def security_headers(url: str) -> dict:
+    response = requests.get(url, timeout=TIMEOUT)
+    return {name: name in response.headers for name in SECURITY_HEADERS}
+
+#result = security_headers(BASE_URL)
+# print(result)
+
+
+# --Ex31--
+
+def score_headers(results: dict) -> str:
+    present = sum(results.values())
+    total = len(results)
+    return f"{present}/{total}"
+
+# print(score_headers(security_headers(BASE_URL)))
+
+# Output = 3/5
+
+
+# --Ex32--
+
+def fetch_robots(base):
+    response = requests.get(base + "/robots.txt", timeout=TIMEOUT)
+    if response.status_code != 200:
+        return None
+    return response.text
+
+def disallowed_paths(robots_text):
+    if robots_text is None:
+        return []
+    paths = []
+    for line in robots_text.splitlines():
+        if line.startswith("Disallow:"):
+            paths.append(line.split(":")[1].strip())
+    return paths
+
+# robots = fetch_robots(BASE_URL)
+# print(disallowed_paths(robots))
+# print(robots)
+
+
+# --Ex33--
+
+def response_times(*urls):
+    times = {}
+    for url in urls:
+        response = requests.get(url, timeout=TIMEOUT)
+        times[url] = response.elapsed.total_seconds()
+    return times
+
+# print(response_times(BASE_URL, ECHO_URL))
+
+# Output: {'https://cybercor.org': 0.287727, 'https://httpbin.org': 0.534556}
+
+
+# --Ex34--
+
+def log(message, **details):
+    parts = [message]
+    for key, value in details.items():
+        parts.append(f"{key}={value}")
+    print(" | ".join(parts))
+
+# log("verificat", url=BASE_URL, status=200)
+
+# print() arata valoarea pe ecran pentru utilizator , dupa afisare
+# valoarea nu ajunge la codul care a apelat functia
+
+# return trimite valoarea inapoi catre codul care a apelat functia
+# astfel poate fi salvata intro variabila , folosita de alte functii
+
+
 
 
 
